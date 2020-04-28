@@ -5,8 +5,8 @@ export default class SignUp extends Component {
     constructor(props){
         super(props);
         this.state={
-            username: '',
-            password: ''
+            username: "",
+            password: ""
         }
     }
 
@@ -18,10 +18,18 @@ export default class SignUp extends Component {
 
     mySubmitHandler=(event)=>{
         event.preventDefault();
+        console.log(this.state);
         fetch('http://localhost:9000/adduser', {
         method: 'POST',
         // We convert the React state to JSON and send it as the POST body
-        body: JSON.stringify(this.state)
+        body: JSON.stringify(
+            this.state
+        ), 
+          
+        // Adding headers to the request 
+        headers: { 
+            "Content-type": "application/json; charset=UTF-8"
+        } 
       }).then(function(response) {
         console.log(response)
         return response.json();
