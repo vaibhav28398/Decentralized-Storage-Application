@@ -18,7 +18,14 @@ export default class SignUp extends Component {
 
     mySubmitHandler=(event)=>{
         event.preventDefault();
-        console.log(this.state);
+        fetch('http://localhost:9000/adduser', {
+        method: 'POST',
+        // We convert the React state to JSON and send it as the POST body
+        body: JSON.stringify(this.state)
+      }).then(function(response) {
+        console.log(response)
+        return response.json();
+      });
     }
     render() {
         return (
