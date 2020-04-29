@@ -1,0 +1,8 @@
+<% if(locals.success) { %>
+    <div class="alert alert-danger"><p><%=success %></p></div>
+  <% } %>
+
+<form action="/fileupload" method="post" enctype="multipart/form-data">
+    <input type="file" name="filetoupload">
+    <input type="submit">
+</form>

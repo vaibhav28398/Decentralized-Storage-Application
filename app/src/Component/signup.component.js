@@ -6,7 +6,8 @@ export default class SignUp extends Component {
         super(props);
         this.state={
             username: "",
-            password: ""
+            password: "",
+            ip: ""
         }
     }
 
@@ -19,6 +20,7 @@ export default class SignUp extends Component {
     mySubmitHandler=(event)=>{
         event.preventDefault();
         console.log(this.state);
+        this.setState({ip: "127.0.0.1"});
         fetch('http://localhost:9000/adduser', {
         method: 'POST',
         // We convert the React state to JSON and send it as the POST body
@@ -30,10 +32,9 @@ export default class SignUp extends Component {
         headers: { 
             "Content-type": "application/json; charset=UTF-8"
         } 
-      }).then(function(response) {
-        console.log(response)
-        return response.json();
-      });
+      }).then(response => response.text())
+      .then(json => {
+        alert(json) });
     }
     render() {
         return (

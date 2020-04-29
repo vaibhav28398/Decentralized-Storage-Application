@@ -31,8 +31,16 @@ app.get('/adduser',(req,res)=>{
 app.post('/adduser',(req,res)=>{
 	var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 	console.log(ip)
+
 	mongo.insertUser(req.body,collection,(result)=>{
-		res.send('Sign up Successful')
+		res.send(result)
+	})
+	console.log('Signed up');
+})
+app.post('/signinuser',(req,res)=>{
+
+	mongo.signInUser(req.body,collection,(result)=>{
+		res.send(result)
 	})
 	console.log('Signed up');
 })
