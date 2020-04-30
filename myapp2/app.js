@@ -30,6 +30,7 @@ app.use(require("express-session")({
 app.use(function(req, res, next) {
   res.locals.user = req.session.username;
   res.locals.ip = req.session.ip;
+  res.locals.uid = req.session.uid;
   next();
 });
 app.use(flash());
