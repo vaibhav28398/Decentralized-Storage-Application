@@ -3,7 +3,7 @@ var router = express.Router();
 var MongoClient=require('mongodb').MongoClient
 var fs = require('fs');
 const splitFile = require('split-file');
-const mkdirp = require('mkdirp')
+const mkdirp = require('mkdirp');
 
 const url="mongodb://localhost:27017"
 
@@ -27,11 +27,13 @@ const fileSplit=function(filename)
             if(error)return process.exit(1);
             var total_users=result.length;
             var total_chunks=names.length;
-
+            var json_file=[];
             if(total_chunks<total_users)
             {
                 for(var i=0;i<total_chunks;i++)
                 {
+                    json_file.push({segment_no: (i+1),nodes:{}});
+                    json_file[i].nodes[i+1]=ssn.ip;
                     const made = mkdirp.sync('C:/Users/hp/Documents/storage/'+(i+1)+'/'+ssn.uid+'/'+filename);
                     fs.rename(names[i],'C:/Users/hp/Documents/storage/'+(i+1)+'/'+ssn.uid+'/'+filename+'/'+filename+'.sf-part'+(i+1) , function (err) {
                         if (err) throw err;
@@ -39,12 +41,16 @@ const fileSplit=function(filename)
                 }
             }
             else{
-                var chunks_in_each_node=total_chunks/total_users;
+                var chunks_in_each_node=Math.floor(total_chunks/total_users);
                 var rem=total_chunks%total_users;
+                console.log('Chunks'+chunks_in_each_node);
+                console.log('rem'+rem);
                 for(var i=0;i<total_users;i++)
                 {
-                    for(j=0;j<chunks_in_each_node;j++)
+                    for(var j=0;j<chunks_in_each_node;j++)
                     {
+                      json_file.push({segment_no: (i*chunks_in_each_node+j+1),nodes:{}});
+                      json_file[i*chunks_in_each_node+j].nodes[i+1]=ssn.ip;
                         const made = mkdirp.sync('C:/Users/hp/Documents/storage/'+(i+1)+'/'+ssn.uid+'/'+filename);
                         fs.rename(names[i*chunks_in_each_node+j],'C:/Users/hp/Documents/storage/'+(i+1)+'/'+ssn.uid+'/'+filename+'/'+filename+'.sf-part'+(i*chunks_in_each_node+j+1), function (err) {
                             if (err) throw err;
@@ -54,15 +60,23 @@ const fileSplit=function(filename)
                 }
                 if(rem!=0)
                 {
-                    for(j=0;j<rem;j++)
+                    for(var j=0;j<rem;j++)
                     {
+                      console.log('inside rem loop');
+                      json_file.push({segment_no: (chunks_in_each_node*total_users+j+1),nodes:{}});
+                      json_file[chunks_in_each_node*total_users+j].nodes[total_users]=ssn.ip;
                         const made = mkdirp.sync('C:/Users/hp/Documents/storage/'+total_users+'/'+ssn.uid+'/'+filename);
-                        fs.rename(names[chunks_in_each_node*total_users+j],'C:/Users/hp/Documents/storage/'+total_users+'/'+ssn.uid+'/'+filename+'/'+filename+'.sf-part'+(i*chunks_in_each_node+j), function (err) {
+                        fs.rename(names[chunks_in_each_node*total_users+j],'C:/Users/hp/Documents/storage/'+total_users+'/'+ssn.uid+'/'+filename+'/'+filename+'.sf-part'+(chunks_in_each_node*total_users+j+1), function (err) {
                             if (err) throw err;
                           });
                     }
                 }
             }
+            const made = mkdirp.sync('C:/Users/hp/Documents/storage/jsonFiles/'+ssn.uid);
+            fs.writeFile('C:/Users/hp/Documents/storage/jsonFiles/'+ssn.uid+'/'+filename+'.json', JSON.stringify(json_file), function (err) {
+              if (err) throw err;
+              console.log('Saved!');
+            });
         })
     })
 

@@ -8,6 +8,7 @@ var session = require("express-session");
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var filesRouter = require('./routes/file');
+var fileDownlaodRouter=require('./routes/fileDownload');
 var app = express();
 
 // view engine setup
@@ -36,6 +37,7 @@ app.use(function(req, res, next) {
 app.use(flash());
 
 app.use('/', indexRouter);
+app.use('/', fileDownlaodRouter);
 app.use('/users', usersRouter);
 app.use('/fileupload', filesRouter);
 // catch 404 and forward to error handler
