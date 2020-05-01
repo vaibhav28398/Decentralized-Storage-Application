@@ -18,6 +18,8 @@
     "mkdirp": "^1.0.4",
     "mongodb": "^3.5.6",
     "morgan": "~1.9.1",
-    "split-file": "^2.2.1"
+    "object-hash": "^2.0.3",
+    "split-file": "^2.2.1",
+    "web3": "^1.2.7"
   }
 }

@@ -4,10 +4,87 @@ var MongoClient=require('mongodb').MongoClient
 var fs = require('fs');
 const splitFile = require('split-file');
 const mkdirp = require('mkdirp');
+const web3 = require('web3');
+var hash = require('object-hash');
 
 const url="mongodb://localhost:27017"
 
 var formidable = require('formidable');
+
+const hashJSONcontract=function(json_file,filename)
+{
+  // if (typeof web3js !== 'undefined') {
+    // web3js = new web3(web3.currentProvider);
+    var hashedJSON=hash(json_file);
+    web3js = new web3(new web3.providers.HttpProvider("http://localhost:8545"));
+    var jsonContract = new web3js.eth.Contract([
+      {
+        "constant": false,
+        "inputs": [
+          {
+            "name": "_fileId",
+            "type": "string"
+          },
+          {
+            "name": "_fileHash",
+            "type": "string"
+          }
+        ],
+        "name": "addFile",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "constant": true,
+        "inputs": [],
+        "name": "fileCount",
+        "outputs": [
+          {
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "constant": true,
+        "inputs": [
+          {
+            "name": "_fileId",
+            "type": "string"
+          }
+        ],
+        "name": "getFile",
+        "outputs": [
+          {
+            "name": "",
+            "type": "string"
+          }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+      }
+    ],'0x4D9e2E52440818e855229BF4A6669b44caB2Ec38');
+
+    console.log(jsonContract);
+    // web3js.eth.defaultAccount = web3js.eth.accounts[0] ;
+    web3js.eth.getAccounts().then((acc) => {
+      let firstAcc=acc[0];
+       console.log(firstAcc);
+       jsonContract.methods.addFile('u'+ssn.uid+'f'+filename,hashedJSON).send({from:firstAcc});
+      });
+    
+
+    // CoursetroContract.methods.setInstructor("shephali", 18).send({from:web3js.eth.defaultAccount});
+  // web3js = new web3(new web3.providers.HttpProvider("http://localhost:8545"));
+
+}
+
 
 const fileSplit=function(filename)
 {
@@ -72,6 +149,9 @@ const fileSplit=function(filename)
                     }
                 }
             }
+
+            hashJSONcontract(json_file,filename);
+
             const made = mkdirp.sync('C:/Users/hp/Documents/storage/jsonFiles/'+ssn.uid);
             fs.writeFile('C:/Users/hp/Documents/storage/jsonFiles/'+ssn.uid+'/'+filename+'.json', JSON.stringify(json_file), function (err) {
               if (err) throw err;
