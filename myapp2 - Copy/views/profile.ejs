@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+  <head>
+  	<title>Profile</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="/stylesheets/style_profile.css">
+    <link rel="stylesheet" href="/stylesheets/style_file_list.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+        
+    <script>
+    $(document).ready(function(){
+      $(".upload").hide();
+      $("#show-upload").click(function(){
+        $(".upload").show();
+        $(".home1").hide();
+  });
+  $("#show-home").click(function(){
+        $(".home1").show();
+        $(".upload").hide();
+  });
+      });
+    </script>
+  </head>
+  <body>
+		
+		<div class="wrapper d-flex align-items-stretch">
+			<nav id="sidebar">
+				<div class="p-4 pt-5">
+		  		<!-- <a href="#" class="img logo rounded-circle mb-5" style="background-image: url(images/logo.jpg);"></a> -->
+	        <ul class="list-unstyled components mb-5">
+	          <li class="active">
+	            <a href="#" id="show-home">Home</a>
+	          </li>
+	          <li>
+	              <a href="#" id="show-upload">Upload</a>
+	          </li>
+	          <li>
+              <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Pages</a>
+              <ul class="collapse list-unstyled" id="pageSubmenu">
+                <li>
+                    <a href="#">Page 1</a>
+                </li>
+                <li>
+                    <a href="#">Page 2</a>
+                </li>
+                <li>
+                    <a href="#">Page 3</a>
+                </li>
+              </ul>
+	          </li>
+	          <li>
+              <a href="#">Portfolio</a>
+	          </li>
+	          <li>
+              <a href="/logout">Logout</a>
+	          </li>
+	        </ul>
+
+          
+
+	      </div>
+    	</nav>
+
+        <!-- Page Content  -->
+      <div id="content" class="home1 p-4 p-md-5">
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          <div class="container-fluid">
+
+            <button type="button" id="sidebarCollapse" class="btn btn-primary">
+              <i class="fa fa-bars"></i>
+              <span class="sr-only">Toggle Menu</span>
+            </button>
+            <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fa fa-bars"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="nav navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Portfolio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Contact</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+        <% if(locals.success) { %>
+          <div class="alert alert-danger"><p><%=success %></p></div>
+        <% } %>
+        <div  class="container">
+          <div class="row">
+              <div class="col-md-10">
+                  <div class="panel panel-primary">
+                      <div class="panel-heading">
+                          <span class="glyphicon glyphicon-list"></span>My Files
+                          <div class="pull-right action-buttons">
+                              <div class="btn-group pull-right">
+                                  
+                                 
+                              </div>
+                          </div>
+                      </div>
+                      <div class="panel-body">
+                          <ul class="list-group">
+                            <% for(var i=0; i<file_list.length; i++){ %>
+                              <li class="list-group-item">
+                                <%= file_list[i] %>
+                                <!-- <span class="pull-right"></span> -->
+                                 <a class="pull-right" href="fileDownload/<%= file_list[i] %>"><span class="glyphicon glyphicon-download"></span></a>                               
+                             
+                         </li>
+                              <% } %>
+                              
+                          </ul>
+                      </div>
+                      
+                  </div>
+              </div>
+          </div>
+      </div>
+      </div>
+      
+
+      <div id="content" class="upload p-4 p-md-5">
+      
+        <h2 class="mb-4">Choose any file to store</h2>
+
+        <form action="/fileupload" method="post" enctype="multipart/form-data">
+          <div class="custom-file">
+            <input type="file" name="filetoupload" class="custom-file-input" id="customFile">
+            <label class="custom-file-label" for="customFile">Choose file</label>
+          </div>
+          <div class="mt-3">
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </div>
+        </form>
+
+        <script>
+          // Add the following code if you want the name of the file appear on select
+          $(".custom-file-input").on("change", function() {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+          });
+          </script>
+
+
+     </div>
+
+    </div> 
+    
+
+  </body>
+</html>

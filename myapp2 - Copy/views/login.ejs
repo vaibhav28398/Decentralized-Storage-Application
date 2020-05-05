@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <title>Decentralised storage</title>
+  <link rel="stylesheet" href="/stylesheets/style_form.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  
+</head>
+<body>
+    
+   
+    <div class="login-page">
+        <div class="form">
+            <% if(locals.duplicate) { %>
+                <div class="alert alert-danger"><p><%=duplicate %></p></div>
+              <% } %>
+              <% if(locals.incorrect) { %>
+                <div class="alert alert-danger"><p><%=incorrect %></p></div>
+              <% } %>
+    
+          <form  action="/register" method="post" class="register-form">
+            <input name="username" type="text" placeholder="name"/>
+            <input name="password" type="password" placeholder="password"/>
+            <input name="ip" hidden type="text" value="127.0.0.1" placeholder="email address"/>
+            <button>create</button>
+            <p class="message">Already registered? <a href="#">Sign In</a></p>
+          </form>
+          <form action="/login" method="post" class="login-form">
+            <input name="username" type="text" placeholder="username"/>
+            <input name="password" type="password" placeholder="password"/>
+            <input name="ip" hidden type="text" value="127.0.0.1" placeholder="email address"/>
+            <button>login</button>
+            <p class="message">Not registered? <a href="#">Create an account</a></p>
+          </form>
+        </div>
+      </div>
+      <script>$('.message a').click(function(){
+        $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
+      });</script>
+</body>
+</html>
